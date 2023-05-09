@@ -9,4 +9,5 @@ const newsSchema = mongoose.Schema({
     dateOfWrite: { type: Date, required: true },
 });
 
-module.exports = { newsSchema };
+
+module.exports = mongoose.model('News', newsSchema);
