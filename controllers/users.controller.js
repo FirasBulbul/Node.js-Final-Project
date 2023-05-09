@@ -2,18 +2,19 @@ const { request } = require('express');
 const bcrypt = require('bcryptjs');
 require("dotenv").config();
 const jwt = require('jsonwebtoken');
+const usersModel = require('../models/users.model');
 
 const signUp = async (data) => {
     try {
         const { first_name, last_name, email, password } = data;
-        const oldUser = await User.findOne({ email });
+        const oldUser = await usersModel.findOne({ email });
         if (oldUser) {
             return { error: "User Already Exists. Please Login" };
         }
         // Encrypting Password
         const encryptedPassword = await bcrypt.hash(password, 10); // 10 is SALT (random string added to the password before hashing)
         // Create a new user
-        const user = await User.create({
+        const user = await usersModel.create({
             first_name: first_name,
             last_name: last_name,
             email: email.toLowerCase(),
@@ -56,7 +57,7 @@ const register = async (request, response, next) => {
 const signIn = async () => {
     try {
         const { email, password } = data;
-        const user = await User.findOne({ email });
+        const user = await usersModel.findOne({ email });
         if (!user) {
             return { error: "Join us :)" };
         }
