@@ -6,7 +6,6 @@ const connection = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
-        // mongoose.connection.once
         console.log('Successful Connection')
     } catch (error) {
         console.error(error)
@@ -15,6 +14,6 @@ const connection = async () => {
 
 }
 
-connection();
+// connection();
 
-module.exports = connection;
+module.exports = { connection };
