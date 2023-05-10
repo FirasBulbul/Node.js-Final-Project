@@ -61,6 +61,7 @@ const signIn = async () => {
         if (!user) {
             return { error: "Join us :)" };
         }
+
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if (!isPasswordMatch) {
             return { error: "Invalid Credentials" };
@@ -75,7 +76,7 @@ const signIn = async () => {
         // return user
         return user;
     } catch (error) {
-        console.log("Couldn't Login", error);
+        console.log("Sign In Error", error);
     }
 }
 
@@ -86,7 +87,9 @@ const login = async (request, response, next) => {
             return response.status(400).json({ message: "Please fill in all the required fields (email, password)." });
         }
         const user = await signIn(body);
+        console.log('test 01');
         if (!user) {
+            console.log('test 01');
             return response.status(404).json({ message: "Couldn't Login" });
         }
         if (user.error) {
