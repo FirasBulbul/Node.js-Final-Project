@@ -9,26 +9,26 @@ const signUp = async (data) => {
         const { first_name, last_name, email, password } = data;
         const oldUser = await usersModel.findOne({ email });
         if (oldUser) {
-            return { error: "User Already Exists. Please Login" };
+            return { error: "Please Login" };
         }
-        // Encrypting Password
-        const encryptedPassword = await bcrypt.hash(password, 10); // 10 is SALT (random string added to the password before hashing)
-        // Create a new user
+
+        const encryption = await bcrypt.hash(password, 10); 
+
         const user = await usersModel.create({
             first_name: first_name,
             last_name: last_name,
             email: email.toLowerCase(),
-            password: encryptedPassword,
+            password: encryption,
             created_at: new Date(),
         });
-        // Create a token
+
         const token = jwt.sign(
             { user_id: user._id, email },
             process.env.JWT_TOKEN_KEY,
         );
-        // save user token
+
         user.token = token;
-        // return new user
+
         return user;
     } catch (error) {
         console.log("Couldn't Create a New User", error);
@@ -66,14 +66,14 @@ const signIn = async () => {
         if (!isPasswordMatch) {
             return { error: "Invalid Credentials" };
         }
-        // Create a token
+
         const token = jwt.sign(
             { user_id: user._id, email },
             process.env.JWT_TOKEN_KEY,
         );
-        // save user token
+
         user.token = token;
-        // return user
+
         return user;
     } catch (error) {
         console.log("Sign In Error", error);
@@ -84,7 +84,7 @@ const login = async (request, response, next) => {
     try {
         const body = request.body;
         if (!body.email || !body.password) {
-            return response.status(400).json({ message: "Please fill in all the required fields (email, password)." });
+            return response.status(400).json({ message: "Please fill (email, password)." });
         }
         const user = await signIn(body);
         console.log('test 01');
