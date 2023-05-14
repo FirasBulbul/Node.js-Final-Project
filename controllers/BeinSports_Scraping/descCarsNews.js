@@ -64,7 +64,7 @@ const getDescNewsinfo = async () => {
       thisOpj.articleBody = articleBody;
 
       await fs.writeFileSync(
-        `${main_categorie}Data.json`,
+        `./data/${main_categorie}Data.json`,
         JSON.stringify(dataJson)
       );
     }
