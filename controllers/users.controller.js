@@ -24,11 +24,13 @@ const signUp = async (data) => {
       password: encryptedPassword,
       created_at: new Date(),
     });
+
     // Create a token
     const token = jwt.sign(
       { user_id: user._id, email },
       process.env.JWT_TOKEN_KEY
     );
+
     // save user token
     user.token = token;
     // return new user
@@ -73,11 +75,13 @@ const signIn = async () => {
     if (!isPasswordMatch) {
       return { error: "Invalid Credentials" };
     }
+
     // Create a token
     const token = jwt.sign(
       { user_id: user._id, email },
       process.env.JWT_TOKEN_KEY
     );
+
     // save user token
     user.token = token;
     // return user
