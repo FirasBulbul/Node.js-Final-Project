@@ -17,9 +17,8 @@ const getDescNewsinfo = async () => {
     if (htmlContent) {
       const $ = cheerio.load(htmlContent);
 
-      const hasVideo = true;
-      // dataListNews[index].has_video;
-      // console.log(hasVideo);
+      const hasVideo = dataListNews[index].has_video;
+      console.log(hasVideo);
 
       // titles
       const selector_titles = () => {
