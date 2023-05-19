@@ -4,10 +4,7 @@ const fs = require("fs");
 //---
 
 const getDescNewsinfo = async () => {
-  const readFileNews_json = await fs.readFileSync(
-    "../../data/news.json",
-    "utf8"
-  );
+  const readFileNews_json = await fs.readFileSync("./data/news.json", "utf8");
   const dataListNews = await JSON.parse(readFileNews_json);
 
   for (var index in dataListNews) {
@@ -20,8 +17,9 @@ const getDescNewsinfo = async () => {
     if (htmlContent) {
       const $ = cheerio.load(htmlContent);
 
-      const hasVideo = dataListNews[index].has_video;
-      console.log(hasVideo);
+      const hasVideo = true;
+      // dataListNews[index].has_video;
+      // console.log(hasVideo);
 
       // titles
       const selector_titles = () => {
@@ -59,7 +57,7 @@ const getDescNewsinfo = async () => {
         thisOpj.videoLink = videoLink;
 
         await fs.writeFileSync(
-          `../../data/news.json`,
+          `./data/news.json`,
           JSON.stringify(dataListNews)
         );
       }
@@ -71,12 +69,12 @@ const getDescNewsinfo = async () => {
   } //END main loop for all categories
 };
 
-// module.exports = getDescNewsinfo;
+module.exports = getDescNewsinfo;
 
-getDescNewsinfo()
-  .then((data) => {
-    console.log("OK: 200 - DescCarsNews");
-  })
-  .catch((err) => {
-    console.log(err.message);
-  });
+// getDescNewsinfo()
+//   .then((data) => {
+//     console.log("OK: 200 - DescCarsNews");
+//   })
+//   .catch((err) => {
+//     console.log(err.message);
+//   });
