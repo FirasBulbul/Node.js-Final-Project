@@ -15,8 +15,8 @@ const signUp = async (data) => {
             return { error: "User Already Exists. Please Login" };
         }
         // Encrypting Password
-        const encryptedPassword = await bcrypt.hash(password, 10); // 10 is SALT (random string added to the password before hashing)
-        // Create a new user
+        const encryptedPassword = await bcrypt.hash(password, 10); 
+
         const user = await usersModel.create({
             first_name: first_name,
             last_name: last_name,
