@@ -1,4 +1,4 @@
-const footballScrap = require("./modules/BeinSports_Scraping");
+const footballScrap = require("./controllers/BeinSports_Scraping");
 
 // --- footballScrap ---
 const handlingScrap = async () => {
