@@ -63,29 +63,26 @@ const register = async (request, response, next) => {
 
 //signIn ---
 const signIn = async () => {
-    try {
-        const { email, password } = data;
-        const user = await usersModel.findOne({ email });
-        if (!user) {
-            return { error: "Join us :)" };
-        }
-
-        const isPasswordMatch = await bcrypt.compare(password, user.password);
-        if (!isPasswordMatch) {
-            return { error: "Error Username or Password: Please Check them :)" };
-        }
-        // costruct a token
-        const token = jwt.sign(
-            { user_id: user._id, email },
-            process.env.TOKEN,
-        );
-        // save token
-        user.token = token;
-        // logging user
-        return user;
-    } catch (error) {
-        console.log("Sign In Error", error);
+    const { email, password } = data;
+    const user = await usersModel.findOne({ email });
+    if (!user) {
+        const error = { status: false, message: "Invalid Credentials, Please Try Again." };
+        return error;
     }
+    const isPasswordMatch = bcrypt.compareSync(password, user.password);
+    if (!isPasswordMatch) {
+        const error = { status: false, message: "Invalid Credentials, Please Try Again." };
+        return error;
+    }
+    // Create a token
+    const token = jwt.sign(
+        { user_id: user._id, email, },
+        process.env.JWT_TOKEN_KEY,
+    );
+    // save user token
+    user.token = token;
+    // return user
+    return user;
 };
 
 //login ---
@@ -95,15 +92,22 @@ const login = async (request, response, next) => {
         if (!body.email || !body.password) {
             return response.status(400).json({ message: "Both Email & Password are required" });
         }
-        const user = await signIn(body);
+        const checkedUser = await signIn(body);
         // console.log('test 01');
-        if (!user) {
+        if (!checkedUser) {
             // console.log('test 02');
             return response.status(404).json({ message: "Sorry Cannot Logging :(" });
         }
-        if (user.error) {
-            return response.status(400).json({ message: user.error });
+        if (checkedUser.error) {
+            return response.status(400).json({ message: checkedUser.error });
         }
+        const user = {
+            first_name: checkedUser.first_name,
+            last_name: checkedUser.last_name,
+            email: checkedUser.email,
+            created_at: checkedUser.created_at,
+            token: checkedUser.token
+        };
         return response.status(200).json(user);
     } catch (error) {
         return response.status(500).json({ error: error });
