@@ -105,7 +105,6 @@ const login = async (request, response, next) => {
             first_name: checkedUser.first_name,
             last_name: checkedUser.last_name,
             email: checkedUser.email,
-            created_at: checkedUser.created_at,
             token: checkedUser.token
         };
         return response.status(200).json(user);
