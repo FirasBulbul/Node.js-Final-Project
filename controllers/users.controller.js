@@ -36,7 +36,6 @@ const signUp = async (data) => {
     } catch (error) {
         console.log("Couldn't Create a New User", error);
     }
-    console.log('test01');
 };
 
 //register ---
@@ -66,18 +65,18 @@ const signIn = async () => {
     const { email, password } = data;
     const user = await usersModel.findOne({ email });
     if (!user) {
-        const error = { status: false, message: "Invalid Credentials, Please Try Again." };
+        const error = { status: false, message: "Join Us :)" };
         return error;
     }
-    const isPasswordMatch = bcrypt.compareSync(password, user.password);
+    const isPasswordMatch = bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
-        const error = { status: false, message: "Invalid Credentials, Please Try Again." };
+        const error = { status: false, message: "Check Password" };
         return error;
     }
     // Create a token
     const token = jwt.sign(
-        { user_id: user._id, email, },
-        process.env.JWT_TOKEN_KEY,
+        { user_id: user._id, email },
+        process.env.TOKEN,
     );
     // save user token
     user.token = token;
@@ -92,10 +91,10 @@ const login = async (request, response, next) => {
         if (!body.email || !body.password) {
             return response.status(400).json({ message: "Both Email & Password are required" });
         }
+        // console.log('test 01');
         const checkedUser = await signIn(body);
-        console.log('test 01');
         if (!checkedUser) {
-            console.log('test 02');
+            // console.log('test 02');
             return response.status(404).json({ message: "Sorry Cannot Logging :(" });
         }
         if (checkedUser.error) {
