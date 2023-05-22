@@ -93,9 +93,9 @@ const login = async (request, response, next) => {
             return response.status(400).json({ message: "Both Email & Password are required" });
         }
         const checkedUser = await signIn(body);
-        // console.log('test 01');
+        console.log('test 01');
         if (!checkedUser) {
-            // console.log('test 02');
+            console.log('test 02');
             return response.status(404).json({ message: "Sorry Cannot Logging :(" });
         }
         if (checkedUser.error) {
