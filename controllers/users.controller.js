@@ -22,7 +22,7 @@ const signUp = async (data) => {
             last_name: last_name,
             email: email.toLowerCase(),
             password: encryptedPassword,
-            created_at: new Date(),
+            // created_at: new Date(),
         });
         // construct token
         const token = jwt.sign(
@@ -36,6 +36,7 @@ const signUp = async (data) => {
     } catch (error) {
         console.log("Couldn't Create a New User", error);
     }
+    console.log('test01');
 };
 
 //register ---
@@ -47,7 +48,7 @@ const register = async (request, response, next) => {
                 .status(400)
                 .json({ message: "Please, All of reuiremnts is compulsory" });
         }
-        const createdUser = await usersModel.signUp(body);
+        const createdUser = await signUp(body);
         if (!createdUser) {
             return response.status(404).json({ message: "No User is Created" });
         }
@@ -94,7 +95,7 @@ const login = async (request, response, next) => {
         if (!body.email || !body.password) {
             return response.status(400).json({ message: "Both Email & Password are required" });
         }
-        const user = await usersModel.signIn(body);
+        const user = await signIn(body);
         // console.log('test 01');
         if (!user) {
             // console.log('test 02');
